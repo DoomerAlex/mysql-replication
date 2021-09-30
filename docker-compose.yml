@@ -1,0 +1,48 @@
+version: '3'
+
+networks:
+  backend:
+
+services:
+
+  mysql-master:
+    image: mysql:5.7
+    container_name: mysql-master
+    restart: unless-stopped
+    volumes:
+      - ./docker/mysql-master/conf.d:/etc/mysql/conf.d
+      - ./var/mysql-master/data:/var/lib/mysql
+      - ./var/mysql-master/logs:/var/log/mysql/
+      - ./var/mysql-master/dump:/dump
+    ports:
+      - "${MYSQL_MASTER_PORT}:3306"
+    security_opt:
+      - seccomp:unconfined
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      TZ: ${WORKSPACE_TIMEZONE}
+    networks:
+      - backend
+
+  mysql-slave:
+    image: mysql:5.7
+    container_name: mysql-slave
+    depends_on:
+      - mysql-master
+    restart: unless-stopped
+    volumes:
+      - ./docker/mysql-slave/conf.d:/etc/mysql/conf.d
+      - ./var/mysql-slave/data:/var/lib/mysql
+      - ./var/mysql-slave/logs:/var/log/mysql/
+      - ./var/mysql-slave/dump:/dump
+    ports:
+      - "${MYSQL_SLAVE_PORT}:3306"
+    security_opt:
+      - seccomp:unconfined
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      TZ: ${WORKSPACE_TIMEZONE}
+    networks:
+      - backend

@@ -1,0 +1,15 @@
+[mysqld]
+# выбираем ID сервера, произвольное число, лучше начинать с 1
+server-id = 1
+# путь к бинарному логу
+log_bin = mysql-bin
+# название Вашей базы данных, которая будет реплицироваться
+#binlog_do_db = library
+
+# Off strict mode
+sql_mode=""
+
+# Slow query settings:
+slow_query_log=0
+slow_query_log_file=/var/log/mysql/slow.log
+long_query_time=10

@@ -1,0 +1,16 @@
+[mysqld]
+log_bin = mysql-bin  # указываем слейву вести собственный двоичный журнал
+server_id = 2  # указываем идентификатор сервера
+relay-log = /var/lib/mysql/mysql-relay-bin # указываем расположение журнала ретрансляции
+relay-log-index = /var/lib/mysql/mysql-relay-bin.index  # этот файл служит перечнем всех имеющихся журналов ретрансляции
+read_only = 1  # переводим слейв в режим “только чтение”
+# База данных для репликации
+#binlog_do_db = library
+
+# Off strict mode
+sql_mode=""
+
+# Slow query settings:
+slow_query_log=0
+slow_query_log_file=/var/log/mysql/slow.log
+long_query_time=10
